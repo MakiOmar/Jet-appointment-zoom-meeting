@@ -26,17 +26,28 @@ if (!class_exists('ANONY_Zoom_Token')){
 		}
 		
 		public function updateAccessToken($token) {
-			
-        	if(!$this->isTransientSet()) {
         		
-	            set_transient( $this->token_transient , $token );
-	        }
+	           set_transient( $this->token_transient , json_encode($token) );
+	    }
+	    
+	    public function getToken(){
+	    	return json_decode( get_transient( $this->token_transient ) ) ;
 	    }
 	    
 	    public function getAccessToken() {	
-        		
-			get_transient( $this->token_transient );
+        	
+        	$token = $this->getToken();
+        	
+        	return $token->access_token;
+			
 	        
+	    }
+	    
+	    public function getRefreshToken(){
+	    	
+	    	$token = $this->getToken();
+	    	
+	    	return $token->refresh_token;
 	    }
 	}
 }
