@@ -33,7 +33,6 @@
 					    
 					    if( response.access === 'allow'){
 					        window.open(response.link, '_blank') ;
-					        console.log(response.link);
 					    }
 						
 						
