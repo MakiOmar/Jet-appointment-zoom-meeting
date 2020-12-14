@@ -13,6 +13,8 @@ add_action( 'wp_ajax_anozom_create_meeting', function(){
             $create_meating = anony_get_general_oauth_zoom_link(intval($doctors_id), intval($order_id));
         }
         
+        set_transient('zoom_temp_'.$doctors_id.'_'.$order_id, $doctors_id, 60);
+        
         $return = [
             'post' => $_POST,
             'access' => 'allow',
