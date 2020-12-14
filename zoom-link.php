@@ -58,7 +58,13 @@ function anony_get_zoom_link($doctors_id, $order_id){
 		
     extract($zoom_data);
     
-    $url = "https://zoom.us/oauth/authorize?response_type=code&client_id=".$client_id."&redirect_uri=".esc_url( REDIRECT_URI ).'&state='.$doctors_id.'-'.$order_id;
+    $order = wc_get_order($order_id);
+    
+    //$user_id = $order->get_user_id(); // or $order->get_customer_id();
+     
+    $user_id = $order->get_customer_id();
+    
+    $url = "https://zoom.us/oauth/authorize?response_type=code&client_id=".$client_id."&redirect_uri=".esc_url( REDIRECT_URI ).'&state='.$doctors_id.'-'.$order_id.'-'.$user_id;
     
     return $url;
     
@@ -71,9 +77,14 @@ function anony_get_zoom_link($doctors_id, $order_id){
  * @return string
  */
 function anony_get_general_oauth_zoom_link($doctors_id, $order_id){
-
     
-    $url = "https://zoom.us/oauth/authorize?response_type=code&client_id=".CLIENT_ID."&redirect_uri=".esc_url( REDIRECT_URI ).'&state='.$doctors_id.'-'.$order_id;
+    $order = wc_get_order($order_id);
+    
+    //$user_id = $order->get_user_id(); // or $order->get_customer_id();
+     
+    $user_id = $order->get_customer_id();
+    
+    $url = "https://zoom.us/oauth/authorize?response_type=code&client_id=".CLIENT_ID."&redirect_uri=".esc_url( REDIRECT_URI ).'&state='.$doctors_id.'-'.$order_id.'-'.$user_id;
     return $url;
     
    // return '<a href="'. $url .'">'.esc_html__('start consultation', ANOZOM_TEXTDOM).'</a>';
