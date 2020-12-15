@@ -5,8 +5,8 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly.
 function anony_get_meetings(){
 	$client = new GuzzleHttp\Client(['base_uri' => 'https://api.zoom.us']);
  
-   	$zoom_token = new ANONY_Zoom_Token();
-    
+   	$zoom_token = new ANONY_Zoom_Token($doctors_id, $order_id, $customer_id);
+     
     $accessToken = $zoom_token->getAccessToken();
     
  
@@ -18,7 +18,7 @@ function anony_get_meetings(){
         ]);
  
         $data = json_encode(json_decode($response->getBody()),true);
-        print_r($data);
+       
  
     } catch(Exception $e) {
         
@@ -38,10 +38,10 @@ function anony_get_meetings(){
             
             $zoom_token->updateAccessToken($response->getBody());
  
-            anony_create_meeting();
+            anony_create_meeting($doctors_id, $order_id, $customer_id);
         } else {
             return $e->getMessage();
         }
     }
 }
-add_shortcode( 'anony-get-meetings', 'anony_get_meetings' );
+//add_shortcode( 'anony-get-meetings', 'anony_get_meetings' );

@@ -2,11 +2,22 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly.
 
-function anony_create_meeting(){
+function anony_create_meeting($doctors_id, $order_id, $customer_id){
 	
 	$client = new GuzzleHttp\Client(['base_uri' => 'https://api.zoom.us']);
- 
-    $zoom_token = new ANONY_Zoom_Token();
+	
+	extract($_GET);
+	
+	$appointment_data = explode('-', $state);
+	
+	$doctors_id = $appointment_data[0];
+	$order_id   = $appointment_data[1];
+	$customer_id   = $appointment_data[2];
+	
+	$current_user_id = get_current_user_id();
+	
+	if(intval($current_user_id) !== intval($doctors_id) && !current_user_can('administrator')) return esc_html__('You have no permission to access here'); 
+    $zoom_token = new ANONY_Zoom_Token($doctors_id, $order_id, $customer_id);
     
     $accessToken = $zoom_token->getAccessToken();
     
@@ -52,7 +63,7 @@ function anony_create_meeting(){
             
             $zoom_token->updateAccessToken($response->getBody());
  
-            anony_create_meeting();
+            anony_create_meeting($doctors_id, $order_id, $customer_id);
         } else {
             $html .= $e->getMessage();
         }

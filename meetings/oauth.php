@@ -9,13 +9,15 @@ function anony_outh_callback(){
 	
 	$appointment_data = explode('-', $state);
 	
+	$doctors_id = $appointment_data[0];
+	$order_id   = $appointment_data[1];
+	$customer_id   = $appointment_data[2];
+	
 	$current_user_id = get_current_user_id();
 	
 	if(get_transient('zoom_temp_'.$current_user_id.'_'.$appointment_data[1]) == $current_user_id || current_user_can('administrator')){
 	    
 	    if(intval($current_user_id) === intval($appointment_data[2]) || current_user_can('administrator')){
-	        
-    	    print_r($appointment_data);
     	    
         	$request = 
         		[
@@ -28,6 +30,8 @@ function anony_outh_callback(){
         	            "redirect_uri" => REDIRECT_URI
         	        ],
         	    ];
+        	    
+        	    
         	
         	try {
         	    $client = new GuzzleHttp\Client(['base_uri' => 'https://zoom.us']);
@@ -35,15 +39,16 @@ function anony_outh_callback(){
         	    $response = $client->request('POST', '/oauth/token', $request);
         	 
         	    $token = json_decode($response->getBody()->getContents(), true);
-        	 
-        	    $zoom_token = new ANONY_Zoom_Token();
-        	 	
+        	    
+        	    
+        	    $zoom_token = new ANONY_Zoom_Token($doctors_id, $order_id, $customer_id);
+        	    
         	 	$zoom_token->updateAccessToken($token);
         	    
         	} catch(Exception $e) {
         		
         	   if( 401 == $e->getCode() ) {
-                    $refresh_token = $accessToken;
+                    $refresh_token = $zoom_token->getRefreshToken($token);
          
                     $client = new GuzzleHttp\Client(['base_uri' => 'https://zoom.us']);
                     $response = $client->request('POST', '/oauth/token', [
@@ -58,7 +63,7 @@ function anony_outh_callback(){
                     
                     $zoom_token->updateAccessToken($response->getBody());
          
-                    anony_create_meeting();
+                    anony_create_meeting($doctors_id, $order_id, $customer_id );
                 } else {
                     return $e->getMessage();
                 }

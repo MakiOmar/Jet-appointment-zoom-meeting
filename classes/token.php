@@ -6,13 +6,23 @@ if (!class_exists('ANONY_Zoom_Token')){
 	
 	class ANONY_Zoom_Token{
 		
-		public function __construct(){
+		public function __construct($doctors_id, $order_id, $customer_id){
 			
 			if(!is_user_logged_in()) return;
 			
-			$this->user_id = get_current_user_id();
+			$this->doctors_id  = $doctors_id;
+			$this->order_id  = $order_id;
+			$this->customer_id  = $customer_id;
 			
-			$this->token_transient = 'zoom-access-token_' . $this->user_id ;
+			$this->token_data = [
+			    
+			    'doctors_id'   => $this->doctors_id,
+			    'order_id'     => $this->order_id,
+			    'customer_id'  => $this->customer_id,
+			    
+			];
+			
+			$this->meta_key = 'zatoken_' . $doctors_id.'_'.$order_id.'_'.$customer_id ;
 		}
 		
 		
@@ -26,28 +36,36 @@ if (!class_exists('ANONY_Zoom_Token')){
 		}
 		
 		public function updateAccessToken($token) {
+		    
+		    $this->token_data['token'] = json_encode($token);
+		    
+            update_post_meta($this->order_id, $this->meta_key, $this->token_data);
         		
-	           set_transient( $this->token_transient , json_encode($token) );
+	    }
+	    
+	    public function getTokenData(){
+	        return get_post_meta($this->order_id, $this->meta_key, true);
 	    }
 	    
 	    public function getToken(){
-	    	return json_decode( get_transient( $this->token_transient ) ) ;
+	        
+	        $token_data = $this->getTokenData();
+	        
+	        return json_decode($token_data['token']);
+
 	    }
 	    
 	    public function getAccessToken() {	
         	
-        	$token = $this->getToken();
-        	
-        	return $token->access_token;
+        	return $this->getToken()->access_token;
 			
 	        
 	    }
 	    
 	    public function getRefreshToken(){
+	        
+	    	return $this->getToken()->refresh_token;
 	    	
-	    	$token = $this->getToken();
-	    	
-	    	return $token->refresh_token;
 	    }
 	}
 }
