@@ -51,7 +51,7 @@ define('ANOZOM_URI', plugin_dir_url( __FILE__ ));
 define('ANOZOM_TEXTDOM', 'anonyengine-zoom-meeting');
 
 
-require_once 'scripts.php';
+require_once 'functions/scripts.php';
 
 /**
  * Holds plugin's classes
