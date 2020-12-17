@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly.
 
 function anony_create_meeting($doctors_id, $order_id, $customer_id){
 	
-	$client = new GuzzleHttp\Client(['base_uri' => 'https://api.zoom.us']);
+	
 	
 	extract($_GET);
 	
@@ -15,6 +15,15 @@ function anony_create_meeting($doctors_id, $order_id, $customer_id){
 	$customer_id   = $appointment_data[2];
 	
 	$order= wc_get_order( intval($order_id) );
+	
+	$order_status  = $order->get_status();
+        
+        
+    if($order_status !== 'completed') {
+        printf(esc_html__('Sorry but this appointment payment is %s', ANOZOM_TEXTDOM), $order_status);
+        
+        return;
+    }
 	$current_user_id = get_current_user_id();
 	
 	if(intval($current_user_id) !== intval($doctors_id) && !current_user_can('administrator')) return esc_html__('You have no permission to access here');
@@ -22,6 +31,8 @@ function anony_create_meeting($doctors_id, $order_id, $customer_id){
     $zoom_token = new ANONY_Zoom_Token($doctors_id, $order_id, $customer_id);
     
     $accessToken = $zoom_token->getAccessToken();
+    
+    $client = new GuzzleHttp\Client(['base_uri' => 'https://api.zoom.us']);
     
     $request = 
     	[
@@ -34,7 +45,7 @@ function anony_create_meeting($doctors_id, $order_id, $customer_id){
                 "start_time" => anony_get_appointment_date($order),
                 //"timezone" => wp_zoom_timezone_string,
                 "duration" => "30", // 30 mins
-                "password" => "123456"
+                "password" => wp_generate_password('6', false),
             ],
         ];
     
@@ -43,7 +54,8 @@ function anony_create_meeting($doctors_id, $order_id, $customer_id){
     
     try {
         $response = $client->request('POST', '/v2/users/me/meetings', $request );
- 
+        update_post_meta(intval($order_id), 'appointment-checkin', true);
+        
         $data = json_decode($response->getBody());
         $html .= "Join URL: ". $data->join_url;
         $html .= "<br>";

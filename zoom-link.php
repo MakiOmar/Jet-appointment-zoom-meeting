@@ -165,22 +165,39 @@ function anony_add_order_zoom_link_admin_table_content( $column ) {
  
         $order = wc_get_order( $post->ID );
         
+        $order_status  = $order->get_status();
         
-		$doctors_id = anony_get_doctors_id($order);
-		
-	   var_dump( anony_get_appointment_date($order)); 
-		
-		
-		?>
-		
-		
-		<div class="checkin container">
+        
+        if($order_status !== 'completed') {
+            echo $order_status;
+            
+            return;
+        }
+        
+        $doctors_id = anony_get_doctors_id($order);
+        
+        $checked_in = get_post_meta(intval($order->get_id()), 'appointment-checkin', true);
+        
+        if(!$checked_in || $checked_in == ''){?>
+            
+            <div class="checkin-container">
 		    
-		    <a href="#" class="button-primary check-in" data-id="<?= $doctors_id ?>" data-order="<?= $post->ID ?>"><?= esc_html__('Check-in', ANOZOM_TEXTDOM) ?></a>
-		    <div class="check-in-links"></div>
+    		    <a href="#" class="button-primary check-in" data-id="<?= $doctors_id ?>" data-order="<?= $post->ID ?>"><?= esc_html__('Check-in', ANOZOM_TEXTDOM) ?></a>
+    		   
+    		    
+    		</div>
+            
+       <?php }else{?>
+           
+           <div class="checkout-container">
 		    
-		</div>
-    <?php }
+    		    <a href="#" class="button-primary check-out" data-id="<?= $doctors_id ?>" data-order="<?= $post->ID ?>"><?= esc_html__('Check out', ANOZOM_TEXTDOM) ?></a>
+    		    
+    		</div>
+       <?php }
+		
+		
+	}
 	
 }
 

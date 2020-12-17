@@ -105,6 +105,7 @@ spl_autoload_register( function ( $class_name ) {
 
 require_once ANOZOM_DIR . 'callback.php';
 require_once ANOZOM_DIR . 'functions/ajax/create-meeting.php';
+require_once ANOZOM_DIR . 'functions/ajax/check.php';
 
 
 
