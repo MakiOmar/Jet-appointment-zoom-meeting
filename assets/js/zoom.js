@@ -6,6 +6,10 @@
                 
                 e.preventDefault();
                 
+                var checkin = confirm(anozomLoca.confirmCheckIn);
+                
+                if(!checkin) return;
+                
                 var id = $(this).data('id');
                 var order_id = $(this).data('order');
                 
@@ -27,7 +31,6 @@
 							}
 						},
 					success: function(response){
-					    
 					    
 					    if( response.access === 'allow'){
 					        window.open(response.link, '_blank') ;
