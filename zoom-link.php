@@ -178,7 +178,7 @@ function anony_add_order_zoom_link_admin_table_content( $column ) {
         
         $checked_in = get_post_meta(intval($order->get_id()), 'appointment-checkin', true);
         
-        if(!$checked_in || $checked_in == ''){?>
+        if(!$checked_in || $checked_in !== 'yes'){?>
             
             <div class="checkin-container">
 		    

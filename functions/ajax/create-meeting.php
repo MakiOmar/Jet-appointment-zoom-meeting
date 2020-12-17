@@ -9,11 +9,17 @@ add_action( 'wp_ajax_anozom_create_meeting', function(){
         
         $checked_in = get_post_meta(intval($order_id), 'appointment-checkin', true);
         
-        if($checked_in || $checked_in === true){
+        if($checked_in || $checked_in === 'yes'){
+            
+            update_post_meta(intval($order_id), 'appointment-checkin', 'no');
             
             $return = [
-                'access' => 'deny',
+                'access' => 'allow',
                 'msg' => esc_html__('You have already checked in', ANOZOM_TEXTDOM),
+                'link' => add_query_arg( array(
+                                'doctor-id' => $doctors_id,
+                                'order-id' => $order_id,
+                            ), REDIRECT_URI ),
             ];
         }else{
             if(ZOOM_OAUTH_PER_USER){

@@ -3,8 +3,29 @@
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly.
 
 function anony_create_meeting($doctors_id, $order_id, $customer_id){
+    $html = '';
+
+    if(isset($_GET['doctor-id']) && isset($_GET['order-id']) && !empty($_GET['doctor-id']) && !empty($_GET['order-id'])  ){
+        
+        
+        $order = wc_get_order(intval($_GET['order-id']));
+    
+        //$user_id = $order->get_user_id(); // or $order->get_customer_id();
+         
+        $customer_id = $order->get_customer_id();
+        
+        $zoom_token = new ANONY_Zoom_Token(intval($_GET['doctor-id']), intval($_GET['order-id']), $customer_id);
+        
+        
+        extract($zoom_token->getTokenData());
+        
+        $html .= "<a href='".$join_url."'>".esc_html__('Join Now', ANOZOM_TEXTDOM)."</a>";
+        $html .= "<p>".sprintf(esc_html__('Meeting password: %s', ANOZOM_TEXTDOM), $join_pass)."</p>";
+        
+        return $html;
+    }
 	
-	
+	if(!isset($_GET['code']) || !isset($_GET['state']) || empty($_GET['code']) || empty($_GET['state'])  ) return;
 	
 	extract($_GET);
 	
@@ -27,6 +48,7 @@ function anony_create_meeting($doctors_id, $order_id, $customer_id){
 	$current_user_id = get_current_user_id();
 	
 	if(intval($current_user_id) !== intval($doctors_id) && !current_user_can('administrator')) return esc_html__('You have no permission to access here');
+	$checked = get_post_meta(intval($order_id), 'appointment-checkin', true);
  
     $zoom_token = new ANONY_Zoom_Token($doctors_id, $order_id, $customer_id);
     
@@ -50,27 +72,29 @@ function anony_create_meeting($doctors_id, $order_id, $customer_id){
         ];
     
     
-    $html = '';
+    
     
     try {
         $response = $client->request('POST', '/v2/users/me/meetings', $request );
-        update_post_meta(intval($order_id), 'appointment-checkin', true);
+        update_post_meta(intval($order_id), 'appointment-checkin', 'yes');
         
         $data = json_decode($response->getBody());
-        $html .= "Join URL: ". $data->join_url;
-        $html .= "<br>";
-        $html .= "Meeting Password: ". $data->password;
+        
+        $html .= "<a href='".$data->join_url."'>".esc_html__('Join Now', ANOZOM_TEXTDOM)."</a>";
+        $html .= "<p>".sprintf(esc_html__('Meeting password: %s', ANOZOM_TEXTDOM), $data->password)."</p>";
         
         $doctor_email = get_post_meta(intval($doctors_id), 'g-mail', true);
+        $patient_email = $order->get_billing_email();
         $protocols = array('http://', 'http://www.','https://', 'https://www.', 'www.');
         $noreply = str_replace($protocols, '', get_bloginfo('url'));
         
         $headers = array(
             'Content-Type: text/html; charset=UTF-8',
-            'From: '.get_bloginfo().' <noreplay@'.$noreply.'>'
+            'From: '.get_bloginfo().' <noreplay@'.$noreply.'>',
+            'Bcc: '.$doctor_email,
             );
          
-        wp_mail( $doctor_email, esc_html__('You have an appointment', ANOZOM_TEXTDOM), $html, $headers );
+        wp_mail($patient_email , esc_html__('You have an appointment', ANOZOM_TEXTDOM), $html, $headers );
  
     } catch(Exception $e) {
         if( 401 == $e->getCode() ) {

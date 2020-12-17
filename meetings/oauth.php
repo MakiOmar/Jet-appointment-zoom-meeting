@@ -3,8 +3,7 @@
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly.
 
 function anony_outh_callback(){
-	if(!isset($_GET['code']) || !isset($_GET['state']) || empty($_GET['code']) || empty($_GET['state'])  ) return esc_html__('Some data are missing');
-	
+	if(!isset($_GET['code']) || !isset($_GET['state']) || empty($_GET['code']) || empty($_GET['state'])  ) return;
 	extract($_GET);
 	
 	$appointment_data = explode('-', $state);
@@ -14,6 +13,12 @@ function anony_outh_callback(){
 	$customer_id   = $appointment_data[2];
 	
 	$current_user_id = get_current_user_id();
+	
+	$zoom_token = new ANONY_Zoom_Token($doctors_id, $order_id, $customer_id);
+	
+	$checked = get_post_meta(intval($order_id), 'appointment-checkin', true);
+	
+	if($checked == 'yes') return;
 	
 	if(get_transient('zoom_temp_'.$current_user_id.'_'.$appointment_data[1]) == $current_user_id || current_user_can('administrator')){
 	    
@@ -39,10 +44,7 @@ function anony_outh_callback(){
         	    $response = $client->request('POST', '/oauth/token', $request);
         	 
         	    $token = json_decode($response->getBody()->getContents(), true);
-        	    
-        	    
-        	    $zoom_token = new ANONY_Zoom_Token($doctors_id, $order_id, $customer_id);
-        	    
+
         	 	$zoom_token->updateAccessToken($token);
         	    
         	} catch(Exception $e) {
