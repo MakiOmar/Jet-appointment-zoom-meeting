@@ -43,6 +43,15 @@ if (!class_exists('ANONY_Zoom_Token')){
         		
 	    }
 	    
+	    public function addJoinUrl($join_url, $password){
+	        $token_data = $this->getTokenData();
+	        
+	        $token_data['join_url'] = $join_url;
+	        $token_data['join_pass'] = $password;
+	        
+	        update_post_meta($this->order_id, $this->meta_key, $token_data);
+	    }
+	    
 	    public function getTokenData(){
 	        return get_post_meta($this->order_id, $this->meta_key, true);
 	    }
