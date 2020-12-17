@@ -16,7 +16,6 @@ function anony_create_meeting($doctors_id, $order_id, $customer_id){
         
         $zoom_token = new ANONY_Zoom_Token(intval($_GET['doctor-id']), intval($_GET['order-id']), $customer_id);
         
-        
         extract($zoom_token->getTokenData());
         
         $html .= "<a href='".$join_url."'>".esc_html__('Join Now', ANOZOM_TEXTDOM)."</a>";
@@ -79,6 +78,8 @@ function anony_create_meeting($doctors_id, $order_id, $customer_id){
         update_post_meta(intval($order_id), 'appointment-checkin', 'yes');
         
         $data = json_decode($response->getBody());
+        
+        $zoom_token->addJoinUrl($data->join_url, $data->password);
         
         $html .= "<a href='".$data->join_url."'>".esc_html__('Join Now', ANOZOM_TEXTDOM)."</a>";
         $html .= "<p>".sprintf(esc_html__('Meeting password: %s', ANOZOM_TEXTDOM), $data->password)."</p>";
