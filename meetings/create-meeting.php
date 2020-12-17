@@ -60,6 +60,17 @@ function anony_create_meeting($doctors_id, $order_id, $customer_id){
         $html .= "Join URL: ". $data->join_url;
         $html .= "<br>";
         $html .= "Meeting Password: ". $data->password;
+        
+        $doctor_email = get_post_meta(intval($doctors_id), 'g-mail', true);
+        $protocols = array('http://', 'http://www.','https://', 'https://www.', 'www.');
+        $noreply = str_replace($protocols, '', get_bloginfo('url'));
+        
+        $headers = array(
+            'Content-Type: text/html; charset=UTF-8',
+            'From: '.get_bloginfo().' <noreplay@'.$noreply.'>'
+            );
+         
+        wp_mail( $doctor_email, esc_html__('You have an appointment', ANOZOM_TEXTDOM), $html, $headers );
  
     } catch(Exception $e) {
         if( 401 == $e->getCode() ) {
