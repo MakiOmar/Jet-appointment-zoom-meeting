@@ -30,8 +30,8 @@ define('CLIENT_ID', 'ORm5wHN1RLuVqHyl99VwyA');
 define('CLIENT_SECRET', 'reQvdpJwulTCenVsoWgKBt0I58Fxsf3X');
 define('REDIRECT_URI', 'https://manara.makiomar.com/zoom-auth/');
 
-require_once 'zoom-link.php';
 
+require_once 'zoom-link.php';
 /**
  * Holds plugin's PATH
  * @const
@@ -103,9 +103,9 @@ spl_autoload_register( function ( $class_name ) {
 	}
 } );
 
-
 require_once ANOZOM_DIR . 'callback.php';
 require_once ANOZOM_DIR . 'functions/ajax/create-meeting.php';
+
 
 
 add_action( 'jet-appointment/wc-integration/process-order',  'get_order_data' , 100, 3 );

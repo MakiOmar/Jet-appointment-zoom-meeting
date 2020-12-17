@@ -14,9 +14,11 @@ function anony_create_meeting($doctors_id, $order_id, $customer_id){
 	$order_id   = $appointment_data[1];
 	$customer_id   = $appointment_data[2];
 	
+	$order= wc_get_order( intval($order_id) );
 	$current_user_id = get_current_user_id();
 	
-	if(intval($current_user_id) !== intval($doctors_id) && !current_user_can('administrator')) return esc_html__('You have no permission to access here'); 
+	if(intval($current_user_id) !== intval($doctors_id) && !current_user_can('administrator')) return esc_html__('You have no permission to access here');
+ 
     $zoom_token = new ANONY_Zoom_Token($doctors_id, $order_id, $customer_id);
     
     $accessToken = $zoom_token->getAccessToken();
@@ -27,9 +29,10 @@ function anony_create_meeting($doctors_id, $order_id, $customer_id){
                 "Authorization" => "Bearer $accessToken"
             ],
             'json' => [
-                "topic" => "Let's learn Laravel",
+                "topic" => "Doctor appointment",
                 "type" => 2,
-                "start_time" => "2020-12-12T20:30:00",
+                "start_time" => anony_get_appointment_date($order),
+                //"timezone" => wp_zoom_timezone_string,
                 "duration" => "30", // 30 mins
                 "password" => "123456"
             ],

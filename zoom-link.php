@@ -91,6 +91,68 @@ function anony_get_general_oauth_zoom_link($doctors_id, $order_id){
 }
 
 /**
+ * get appointment data
+ * @param obj $order
+ * @return array
+ */
+function anony_get_appointment_data($order){
+	foreach($order->get_meta_data() as $index => $item){
+        
+        foreach( $item->get_data() as $item_data){
+            
+            if(is_array($item_data) && isset($item_data['form_data'])){
+                return $item_data['form_data'] ;
+            }
+    
+        }
+    }
+}
+
+/**
+ * get appointment time zone 
+ * @return string
+ */
+function wp_zoom_timezone_string() {
+    $timezone_string = get_option( 'timezone_string' );
+ 
+    if ( $timezone_string ) {
+        return $timezone_string;
+    }
+ 
+    $offset  = (float) get_option( 'gmt_offset' );
+    $hours   = (int) $offset;
+    $minutes = ( $offset - $hours );
+ 
+    $sign      = ( $offset < 0 ) ? '-' : '+';
+    $abs_hour  = abs( $hours );
+    $abs_mins  = abs( $minutes * 60 );
+    $tz_offset = sprintf( 'UTC%s%02d:%02d', $sign, $abs_hour, $abs_mins );
+ 
+    return $tz_offset;
+}
+/**
+ * get appointment date
+ * @param obj $order
+ * @return array
+ */
+function anony_get_appointment_date($order){
+    $data = anony_get_appointment_data($order);
+    $date = $data['date'];
+    $date_format = get_option('date_format');
+    $time_format = get_option('time_format');
+    $format = $date_format.', '.$time_format;
+	
+	
+	$date_obj = DateTime::createFromFormat($format, $date);
+	
+	$zoom_date = $date_obj->format('Y-m-d');
+	$zoom_time = $date_obj->format('H:i:s');
+	
+	//$time_stamp = date("M d, Y, H:i",strtotime($date_time));
+	
+	return $zoom_date.'T'.$zoom_time;
+}
+/**
  * Generats Zoom's checkin markup to admins' orders table
  * @param string $column
  * @return void
@@ -104,7 +166,12 @@ function anony_add_order_zoom_link_admin_table_content( $column ) {
         $order = wc_get_order( $post->ID );
         
         
-		$doctors_id = anony_get_doctors_id($order);?>
+		$doctors_id = anony_get_doctors_id($order);
+		
+	   var_dump( anony_get_appointment_date($order)); 
+		
+		
+		?>
 		
 		
 		<div class="checkin container">
