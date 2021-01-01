@@ -152,6 +152,74 @@ function anony_get_appointment_date($order){
 	
 	return $zoom_date.'T'.$zoom_time;
 }
+function anony_checkin_markup($order){
+    
+    $order_status  = $order->get_status();
+        
+        
+        if($order_status !== 'completed') {
+            echo $order_status;
+            
+            return;
+        }
+        
+        $doctors_id = anony_get_doctors_id($order);
+        
+        
+        $checked_in = get_post_meta(intval($order->get_id()), 'appointment-checkin', true);
+        
+        $user = wp_get_current_user();
+        
+        $legible_roles = array_intersect(['anony_doctor', 'administrator'], (array) $user->roles);
+        
+        $token_data = anony_get_zoom_token_data($order);
+        
+        
+ 
+        if(!$checked_in || $checked_in !== 'yes'){?>
+        
+            <div class="checkin-container">
+           
+                <?php if ( !empty($legible_roles) ) {?>
+    
+            		    <a href="#" class="button-primary check-state check-in" data-id="<?= $doctors_id ?>" data-order="<?= $order->get_id() ?>"><?= esc_html__('Check-in', ANOZOM_TEXTDOM) ?></a>
+    
+                <?php }elseif(is_array($token_data) && !empty($token_data)){ 
+                    
+                    extract($token_data);
+                
+                ?>
+    
+            		    <a href="#" class="button-primary check-state is-out" data-id="<?= $doctors_id ?>" data-order="<?= $order->get_id() ?>"><?= esc_html__('Doctor out', ANOZOM_TEXTDOM) ?></a><span class="is-out-tip"><i class="fa fa-info-circle"></i></span>
+            		    <div class="appointment-tip">
+            		        
+            		        <p><?= esc_html__('You will be able to start consulting, once your doctor checks in', ANOZOM_TEXTDOM) ?></p>
+            		        
+            		    </div>
+                
+                <?php }?> 
+            </div>
+            
+       <?php }else{
+       
+        extract($token_data);
+       
+       ?>
+           
+            <div class="checkout-container">
+                <?php if ( !empty($legible_roles) ) {?>
+                
+    		        <a href="#" class="button-primary check-state check-out" data-id="<?= $doctors_id ?>" data-order="<?= $order->get_id() ?>"><?= esc_html__('Check out', ANOZOM_TEXTDOM) ?></a>
+    		        
+    		        <a href="<?= $join_url ?>" class="button-primary check-state start-consulting" data-id="<?= $doctors_id ?>" data-order="<?= $order->get_id() ?>"><i class="fa fa-video-camera"></i></a>
+    		   <?php }else{?>
+    		   
+    		    <a href="<?= $join_url ?>" class="button-primary check-state start-consulting" data-id="<?= $doctors_id ?>" data-order="<?= $order->get_id() ?>"><i class="fa fa-video-camera"></i></a>
+    		   <?php }?>
+    		</div>
+
+       <?php }
+}
 /**
  * Generats Zoom's checkin markup to admins' orders table
  * @param string $column
@@ -165,37 +233,8 @@ function anony_add_order_zoom_link_admin_table_content( $column ) {
  
         $order = wc_get_order( $post->ID );
         
-        $order_status  = $order->get_status();
         
-        
-        if($order_status !== 'completed') {
-            echo $order_status;
-            
-            return;
-        }
-        
-        $doctors_id = anony_get_doctors_id($order);
-        
-        $checked_in = get_post_meta(intval($order->get_id()), 'appointment-checkin', true);
-        
-        if(!$checked_in || $checked_in !== 'yes'){?>
-            
-            <div class="checkin-container">
-		    
-    		    <a href="#" class="button-primary check-in" data-id="<?= $doctors_id ?>" data-order="<?= $post->ID ?>"><?= esc_html__('Check-in', ANOZOM_TEXTDOM) ?></a>
-    		   
-    		    
-    		</div>
-            
-       <?php }else{?>
-           
-           <div class="checkout-container">
-		    
-    		    <a href="#" class="button-primary check-out" data-id="<?= $doctors_id ?>" data-order="<?= $post->ID ?>"><?= esc_html__('Check out', ANOZOM_TEXTDOM) ?></a>
-    		    
-    		</div>
-       <?php }
-		
+		anony_checkin_markup($order);
 		
 	}
 	

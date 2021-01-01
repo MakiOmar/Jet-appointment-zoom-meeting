@@ -1,6 +1,16 @@
 ;(function($){
             
             "use strict";
+            $(".is-out-tip").on('click', function(e){
+                var parent = $(this).parent();
+                
+                var target = parent.find('.appointment-tip');
+                if(target.hasClass('show-tip')){
+                    target.removeClass('show-tip');
+                }else{
+                    target.addClass('show-tip');
+                }
+            });
             
             $(".check-in").on('click', function(e){
                 
@@ -31,7 +41,7 @@
 							}
 						},
 					success: function(response){
-					    
+					    console.log(response.msg)
 					    if( response.access === 'allow'){
 					        window.open(response.link, '_blank') ;
 					    }
@@ -83,6 +93,33 @@
 			
 			
 			
+            });
+            
+            $(".appointment-json").each(function(){
+                var el = $(this);
+                
+                var order_id= el.data('id');
+                
+                var appointment_json = JSON.parse(el.val());
+                
+                var sub_domain = 'api';
+                
+                console.log(appointment_json.is_mobile);
+                
+                if(appointment_json.is_mobile === false){
+                    
+                    sub_domain = 'web';
+                }
+                
+                var whatsAppText =    'Zoom URL : ' + appointment_json.join_url  + "\r\n\r\n" 
+                + 'Zoom password : ' + appointment_json.join_pass + "\r\n\r\n" 
+                + 'Customer name : ' + appointment_json.customer_name + "\r\n\r\n" 
+                + 'Visit type : ' + appointment_json.visit_type + "\r\n\r\n" 
+                + 'Date : ' + appointment_json.appointment_date + "\r\n\r\n" 
+                + 'Time : ' + appointment_json.appointment_time;
+                
+                var _text_ = window.encodeURIComponent(whatsAppText);
+                $('.send-whatsapp-' + order_id).attr('href', 'https://'+sub_domain+'.whatsapp.com/send?text=' + _text_ );
             });
             
         })(jQuery);

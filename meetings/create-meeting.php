@@ -2,6 +2,14 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly.
 
+function anony_get_meeting_crids($doctors_id, $order_id, $customer_id){
+    $zoom_token = new ANONY_Zoom_Token(intval($doctors_id), intval($order_id), $customer_id);
+        
+        extract($zoom_token->getTokenData());
+        
+        return ['join_url' => $join_url, 'join_pass' => $join_pass];
+}
+
 function anony_create_meeting($doctors_id, $order_id, $customer_id){
     $html = '';
 
@@ -44,12 +52,15 @@ function anony_create_meeting($doctors_id, $order_id, $customer_id){
         
         return;
     }
-	$current_user_id = get_current_user_id();
+	$current_doctor_id = get_current_doctor_profile_id();
 	
-	if(intval($current_user_id) !== intval($doctors_id) && !current_user_can('administrator')) return esc_html__('You have no permission to access here');
+	
+	if(intval($current_doctor_id) !== intval($doctors_id) && !current_user_can('administrator')) return esc_html__('You have no permission to access here');
 	$checked = get_post_meta(intval($order_id), 'appointment-checkin', true);
- 
+    
     $zoom_token = new ANONY_Zoom_Token($doctors_id, $order_id, $customer_id);
+    
+    
     
     $accessToken = $zoom_token->getAccessToken();
     

@@ -19,6 +19,37 @@ add_action('init', function(){
 });
 
 /**
+ * Options page name
+ */
+define('ZOOM_OPTS_KEY', 'clinic-options');
+
+$zoom_opts = get_option(ZOOM_OPTS_KEY);
+
+
+
+add_action( 'admin_notices', function() {
+    $zoom_opts = get_option(ZOOM_OPTS_KEY);
+
+	if(
+        !$zoom_opts || 
+        empty($zoom_opts) ||
+        !isset($zoom_opts['client-id'] ) ||
+        empty($zoom_opts['client-id']) ||
+        !isset($zoom_opts['client-secret'] ) ||
+        empty($zoom_opts['client-secret']) ||
+        !isset($zoom_opts['oauth-redirect-uri'] ) ||
+        empty($zoom_opts['oauth-redirect-uri'])
+    ){
+        $url = admin_url();
+        $url = add_query_arg('page', ZOOM_OPTS_KEY, $url);
+	    ?>
+	    <div class="notice notice-error is-dismissible">
+	        <p><?php printf(__( 'Zoom oAuth data is missing or incomplete, so please make sure all data are correct from <a href="%s">Here</a>' ), $url); ?></p>
+	    </div>
+	<?php }
+});
+
+/**
  * If set to false, Zoom's OAuth will use general cridentials
  */
 define('ZOOM_OAUTH_PER_USER', false);
@@ -26,9 +57,9 @@ define('ZOOM_OAUTH_PER_USER', false);
 /**
  * General zoom OAuth cridentials
  */
-define('CLIENT_ID', 'ORm5wHN1RLuVqHyl99VwyA');
-define('CLIENT_SECRET', 'reQvdpJwulTCenVsoWgKBt0I58Fxsf3X');
-define('REDIRECT_URI', 'https://manara.makiomar.com/zoom-auth/');
+define('CLIENT_ID', $zoom_opts['client-id']);
+define('CLIENT_SECRET', $zoom_opts['client-secret'] );
+define('REDIRECT_URI', $zoom_opts['oauth-redirect-uri']);
 
 
 require_once 'zoom-link.php';
@@ -103,10 +134,20 @@ spl_autoload_register( function ( $class_name ) {
 	}
 } );
 
+require_once ANOZOM_DIR . 'functions/helper.php';
 require_once ANOZOM_DIR . 'callback.php';
 require_once ANOZOM_DIR . 'functions/ajax/create-meeting.php';
 require_once ANOZOM_DIR . 'functions/ajax/check.php';
+require_once ANOZOM_DIR . 'functions/listings/provider.php';
+require_once ANOZOM_DIR . 'functions/roles.php';
+require_once ANOZOM_DIR . 'functions/woocommerce/endpint.php';
 
+
+function _do_after_activate() {
+    flush_rewrite_rules( true );
+ 
+}
+register_activation_hook( __FILE__, '_do_after_activate' );
 
 
 add_action( 'jet-appointment/wc-integration/process-order',  'get_order_data' , 100, 3 );
@@ -121,8 +162,9 @@ function get_order_data($order_id, $order, $cart_item){
 
 add_action('wp_footer', function(){
 	
-	$data = get_option('test-hook');
+
+/*
 	echo '<pre>';
-	//var_dump($data[1]);
-	echo '</pre>';
+	
+	echo '</pre>';*/
 });

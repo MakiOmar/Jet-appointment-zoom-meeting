@@ -20,9 +20,11 @@ function anony_outh_callback(){
 	
 	if($checked == 'yes') return;
 	
-	if(get_transient('zoom_temp_'.$current_user_id.'_'.$appointment_data[1]) == $current_user_id || current_user_can('administrator')){
+	$current_doctor_id = get_current_doctor_profile_id();
+	
+	if(get_transient('zoom_temp_'.$doctors_id.'_'.$order_id) == $doctors_id || current_user_can('administrator')){
 	    
-	    if(intval($current_user_id) === intval($appointment_data[2]) || current_user_can('administrator')){
+	    if(intval($current_doctor_id) === intval($doctors_id) || current_user_can('administrator')){
     	    
         	$request = 
         		[

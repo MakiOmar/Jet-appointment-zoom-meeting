@@ -5,13 +5,18 @@ add_action( 'wp_ajax_anozom_create_meeting', function(){
     
     extract($_POST);
     
-    if(current_user_can('administrator') || get_current_user_id() === intval($doctors_id)){
+    $current_doctor_id = get_current_doctor_profile_id();
+    
+    
+    if(current_user_can('administrator') || intval($current_doctor_id) === intval($doctors_id)){
         
-        $checked_in = get_post_meta(intval($order_id), 'appointment-checkin', true);
-        
-        if($checked_in || $checked_in === 'yes'){
+         $checked_in = get_post_meta(intval($order_id), 'appointment-checkin', true);
+       
+        if($checked_in){
             
-            update_post_meta(intval($order_id), 'appointment-checkin', 'no');
+            if($checked_in !== 'yes') update_post_meta(intval($order_id), 'appointment-checkin', 'yes');
+            
+            //update_post_meta(intval($order_id), 'appointment-checkin', 'no');
             
             $return = [
                 'access' => 'allow',
@@ -28,7 +33,11 @@ add_action( 'wp_ajax_anozom_create_meeting', function(){
                 $create_meating = anony_get_general_oauth_zoom_link(intval($doctors_id), intval($order_id));
             }
             
-            set_transient('zoom_temp_'.$doctors_id.'_'.$order_id, $doctors_id, 60);
+            $order = wc_get_order($order_id);
+            
+            $customer_id = $order->get_customer_id();
+            
+            set_transient('zoom_temp_'.$doctors_id.'_'.$order_id, $doctors_id, 360);
             
             $return = [
                 'post' => $_POST,
