@@ -182,7 +182,7 @@ function anony_checkin_markup($order){
            
                 <?php if ( !empty($legible_roles) ) {?>
     
-            		    <a href="#" class="button-primary check-state check-in" data-id="<?= $doctors_id ?>" data-order="<?= $order->get_id() ?>"><?= esc_html__('Check-in', ANOZOM_TEXTDOM) ?></a>
+            		    <a href="#" class="check-state check-in" data-id="<?= $doctors_id ?>" data-order="<?= $order->get_id() ?>"><span class="zoom-loading-bg"></span><span class="zoom-loading"></span><?= esc_html__('Check-in', ANOZOM_TEXTDOM) ?></a>
     
                 <?php }elseif(is_array($token_data) && !empty($token_data)){ 
                     
@@ -190,7 +190,7 @@ function anony_checkin_markup($order){
                 
                 ?>
     
-            		    <a href="#" class="button-primary check-state is-out" data-id="<?= $doctors_id ?>" data-order="<?= $order->get_id() ?>"><?= esc_html__('Doctor out', ANOZOM_TEXTDOM) ?></a><span class="is-out-tip"><i class="fa fa-info-circle"></i></span>
+            		    <a href="#" class="check-state is-out" data-id="<?= $doctors_id ?>" data-order="<?= $order->get_id() ?>"><?= esc_html__('Doctor out', ANOZOM_TEXTDOM) ?></a><span class="is-out-tip"><i class="fa fa-info-circle"></i></span>
             		    <div class="appointment-tip">
             		        
             		        <p><?= esc_html__('You will be able to start consulting, once your doctor checks in', ANOZOM_TEXTDOM) ?></p>
@@ -207,14 +207,23 @@ function anony_checkin_markup($order){
        ?>
            
             <div class="checkout-container">
-                <?php if ( !empty($legible_roles) ) {?>
+                <?php if ( !empty($legible_roles) ) { ?>
                 
-    		        <a href="#" class="button-primary check-state check-out" data-id="<?= $doctors_id ?>" data-order="<?= $order->get_id() ?>"><?= esc_html__('Check out', ANOZOM_TEXTDOM) ?></a>
+    		        <a href="#" class="check-state check-out" data-id="<?= $doctors_id ?>" data-order="<?= $order->get_id() ?>"><span class="zoom-loading-bg"></span><span class="zoom-loading"></span><?= esc_html__('Check out', ANOZOM_TEXTDOM) ?></a>
     		        
-    		        <a href="<?= $join_url ?>" class="button-primary check-state start-consulting" data-id="<?= $doctors_id ?>" data-order="<?= $order->get_id() ?>"><i class="fa fa-video-camera"></i></a>
+    		        <?php if(!is_admin()) : ?>
+    		        
+    		            <a href="<?= $join_url ?>" class="check-state start-consulting" data-id="<?= $doctors_id ?>" data-order="<?= $order->get_id() ?>"><i class="fa fa-video-camera"></i></a>
+    		        
+    		        <?php else: ?>
+    		            
+    		            <a href="<?= $join_url ?>" class="check-state" data-id="<?= $doctors_id ?>" data-order="<?= $order->get_id() ?>"><?= esc_html__('Start meeting', ANOZOM_TEXTDOM) ?></a>
+    		            
+    		        <?php endif; ?>
+    		        
     		   <?php }else{?>
     		   
-    		    <a href="<?= $join_url ?>" class="button-primary check-state start-consulting" data-id="<?= $doctors_id ?>" data-order="<?= $order->get_id() ?>"><i class="fa fa-video-camera"></i></a>
+    		    <a href="<?= $join_url ?>" class="check-state start-consulting" data-id="<?= $doctors_id ?>" data-order="<?= $order->get_id() ?>"><i class="fa fa-video-camera"></i></a>
     		   <?php }?>
     		</div>
 

@@ -67,6 +67,7 @@ function anozom_scripts(){
 add_action('admin_enqueue_scripts',function() {
 		
 	anozom_scripts();
+	anozom_styles();
 	
 });
 

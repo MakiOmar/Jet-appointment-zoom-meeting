@@ -1,6 +1,10 @@
 .checkin-container{
     position: relative;
 }
+.checkout-container{
+    display: flex;
+    align-items: center;
+}
 .appointment-item-wrapper{
     padding: 20px;
     border: 1px solid #eaeaea;
@@ -35,6 +39,47 @@ ul.appointment-item{
     border-radius: 10px;
     margin:10px 0;
     display: inline-flex;
+    margin: 2px;
+    position:relative;
+    
+}
+.zoom-loading-bg {
+	position: absolute;
+	top: 0;
+    left: 0;
+	display: block;
+	height: 100%;
+	width: 100%;
+	background-color: rgb(255,255,255,0.5);
+	border-radius: 10px;
+}
+
+.zoom-loading{
+	position: absolute;
+	top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+	display: block;
+	height: 25px;
+	width: 25px;
+	border: 3px solid rgb(255,255,255, 0.3);
+	border-top-color: #227511;
+    border-radius: 50%;
+    margin: auto;
+    animation: spin 1s linear infinite;
+    -webkit-animation: spin 1s linear infinite;
+    -moz-animation: spin 1s linear infinite;
+    -ms-animation: spin 1s linear infinite;
+    -o-animation: spin 1s linear infinite;
+}
+@keyframes zoom-rotate {
+  0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.zoom-loading, .zoom-loading-bg{
+    display: none;
 }
 
 .check-state.is-out{

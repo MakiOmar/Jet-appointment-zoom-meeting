@@ -22,6 +22,9 @@
                 
                 var id = $(this).data('id');
                 var order_id = $(this).data('order');
+                var clicked = $(this);
+                
+	
                 
                 $.ajax({
 					type : 'POST',
@@ -29,7 +32,9 @@
 				
 					data: 'action=anozom_create_meeting&doctors_id=' + id + '&order_id=' + order_id, // send form data + action parameter
 					
-					beforeSend: function(){},
+					beforeSend: function(){
+					    clicked.find('.zoom-loading, .zoom-loading-bg').show();
+					},
 					
 					error: function (request, status, error) {
 							if( status === 500 ){
@@ -46,10 +51,12 @@
 					        window.open(response.link, '_blank') ;
 					    }
 						
-						
 					},
 					
-					complete: function(){}
+					complete: function(){
+					    
+					    clicked.find('.zoom-loading, .zoom-loading-bg').hide();
+					}
 	
 			});
 			
@@ -63,6 +70,7 @@
                 
                 var id = $(this).data('id');
                 var order_id = $(this).data('order');
+                var clicked = $(this);
                 
                 $.ajax({
 					type : 'POST',
@@ -70,7 +78,9 @@
 				
 					data: 'action=anozom_appointment_checkout&doctors_id=' + id + '&order_id=' + order_id, // send form data + action parameter
 					
-					beforeSend: function(){},
+					beforeSend: function(){
+					    clicked.find('.zoom-loading, .zoom-loading-bg').show();
+					},
 					
 					error: function (request, status, error) {
 							if( status === 500 ){
@@ -87,7 +97,9 @@
 					    }
 					},
 					
-					complete: function(){}
+					complete: function(){
+					    clicked.find('.zoom-loading, .zoom-loading-bg').hide();
+					}
 	
 			});
 			
