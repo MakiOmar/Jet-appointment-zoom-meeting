@@ -165,7 +165,6 @@ function anony_checkin_markup($order){
         
         $doctors_id = anony_get_doctors_id($order);
         
-        
         $checked_in = get_post_meta(intval($order->get_id()), 'appointment-checkin', true);
         
         $user = wp_get_current_user();
@@ -211,7 +210,7 @@ function anony_checkin_markup($order){
                 
     		        <a href="#" class="check-state check-out" data-id="<?= $doctors_id ?>" data-order="<?= $order->get_id() ?>"><span class="zoom-loading-bg"></span><span class="zoom-loading"></span><?= esc_html__('Check out', ANOZOM_TEXTDOM) ?></a>
     		        
-    		        <?php if(!is_admin()) : ?>
+    		        <?php if(!is_admin() || (is_admin() && defined('DOING_AJAX') && DOING_AJAX) ) : ?>
     		        
     		            <a href="<?= $join_url ?>" class="check-state start-consulting" data-id="<?= $doctors_id ?>" data-order="<?= $order->get_id() ?>"><i class="fa fa-video-camera"></i></a>
     		        
@@ -240,12 +239,13 @@ function anony_add_order_zoom_link_admin_table_content( $column ) {
  
     if ( 'anony_zoom_link' === $column ) {
  
-        $order = wc_get_order( $post->ID );
+        $order = wc_get_order( $post->ID );?>
         
-        
-		anony_checkin_markup($order);
+        <div id="zoom-controls-<?= $post->ID ?>">
+		    <?php anony_checkin_markup($order);?>
+		</div>
 		
-	}
+<?php	}
 	
 }
 

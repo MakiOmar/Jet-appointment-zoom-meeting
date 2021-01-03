@@ -76,8 +76,10 @@ function anony_provider_appointments($provider_id, $query_by = 'provider'){
     					
     					
     				</ul>
+    				<div id="zoom-controls-<?= $order_id ?>">
+    				    <?= $checkin_link ?>
+    				</div>
     				
-    				<?= $checkin_link ?>
 				</div>
 				
 				

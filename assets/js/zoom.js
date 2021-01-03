@@ -12,7 +12,7 @@
                 }
             });
             
-            $(".check-in").on('click', function(e){
+            $('body').on('click',".check-in", function(e){
                 
                 e.preventDefault();
                 
@@ -43,11 +43,17 @@
 							} else if( status === 'timeout' ){
 								
 								alert('Error: Server doesn\'t respond.');
+							}else{
+							    alert('Error: something is going wrong.');
+
 							}
 						},
 					success: function(response){
 					    console.log(response.msg)
 					    if( response.access === 'allow'){
+					        if(response.html !== undefined){
+					            $('#zoom-controls-' + order_id).html(response.html);
+					        }
 					        window.open(response.link, '_blank') ;
 					    }
 						
@@ -64,9 +70,12 @@
 			
             });
             
-            $(".check-out").on('click', function(e){
+            $('body').on('click',".check-out", function(e){
                 
                 e.preventDefault();
+                var checkout = confirm(anozomLoca.confirmCheckOut);
+                
+                if(!checkout) return;
                 
                 var id = $(this).data('id');
                 var order_id = $(this).data('order');
@@ -89,16 +98,23 @@
 							} else if( status === 'timeout' ){
 								
 								alert('Error: Server doesn\'t respond.');
+							}else{
+							    alert('Error: something is going wrong.');
+
 							}
 						},
 					success: function(response){
-					    if(response.updated === true){
-					        location.reload();
+					    if(response.updated === true && response.html !== undefined ){
+					        //location.reload();
+					        $('#zoom-controls-' + order_id).html(response.html);
+					        
+					        
 					    }
 					},
 					
 					complete: function(){
 					    clicked.find('.zoom-loading, .zoom-loading-bg').hide();
+					    
 					}
 	
 			});
@@ -115,8 +131,6 @@
                 var appointment_json = JSON.parse(el.val());
                 
                 var sub_domain = 'api';
-                
-                console.log(appointment_json.is_mobile);
                 
                 if(appointment_json.is_mobile === false){
                     

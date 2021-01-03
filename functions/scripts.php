@@ -30,6 +30,7 @@ function anozom_styles(){
 	}
 
 }
+
 function anozom_scripts(){
     $scripts = array('zoom');
     
@@ -57,7 +58,8 @@ function anozom_scripts(){
 		'ajaxURL'          => admin_url( 'admin-ajax.php' ),
 		'textDir'          => (is_rtl() ? 'rtl' : 'ltr'),
 		'themeLang'        => get_bloginfo('language'),
-		'confirmCheckIn'   => esc_html__('Are you sure to check in?', ANOZOM_TEXTDOM),
+		'confirmCheckIn'   => esc_html__('Are you sure you want to check in?', ANOZOM_TEXTDOM),
+		'confirmCheckOut'   => esc_html__('Are you sure you want to check out?', ANOZOM_TEXTDOM),
 	);
 	wp_localize_script( 'anozom-zoom', 'anozomLoca', $anozom_loca );
 }

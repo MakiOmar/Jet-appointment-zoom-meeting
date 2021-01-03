@@ -10,16 +10,22 @@ add_action( 'wp_ajax_anozom_create_meeting', function(){
     
     if(current_user_can('administrator') || intval($current_doctor_id) === intval($doctors_id)){
         
-         $checked_in = get_post_meta(intval($order_id), 'appointment-checkin', true);
+        $order = wc_get_order($order_id);
+        $checked_in = get_post_meta(intval($order_id), 'appointment-checkin', true);
        
         if($checked_in){
             
             if($checked_in !== 'yes') update_post_meta(intval($order_id), 'appointment-checkin', 'yes');
             
+            ob_start();
+                anony_checkin_markup($order);
+            $checkout_html = ob_get_clean();
+            
             //update_post_meta(intval($order_id), 'appointment-checkin', 'no');
             
             $return = [
                 'access' => 'allow',
+                'html' => $checkout_html,
                 'msg' => esc_html__('You have already checked in', ANOZOM_TEXTDOM),
                 'link' => add_query_arg( array(
                                 'doctor-id' => $doctors_id,
@@ -33,7 +39,7 @@ add_action( 'wp_ajax_anozom_create_meeting', function(){
                 $create_meating = anony_get_general_oauth_zoom_link(intval($doctors_id), intval($order_id));
             }
             
-            $order = wc_get_order($order_id);
+            
             
             $customer_id = $order->get_customer_id();
             
@@ -42,6 +48,7 @@ add_action( 'wp_ajax_anozom_create_meeting', function(){
             $return = [
                 'post' => $_POST,
                 'access' => 'allow',
+                //'html' => $checkout_html,
                 'msg' => '',
                 'link' => $create_meating,
             ];
