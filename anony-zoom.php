@@ -168,3 +168,12 @@ add_action('wp_footer', function(){
 	
 	echo '</pre>';*/
 });
+
+/**
+ * Load plugin textdomain.
+ */
+add_action( 'init',  function () {
+  load_plugin_textdomain( ANOZOM_TEXTDOM, false, dirname( plugin_basename( __FILE__ ) ) . '/languages' ); 
+});
+  
+

@@ -1,0 +1,137 @@
+msgid ""
+msgstr ""
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5);\n"
+"Project-Id-Version: AnonyEngine Zoom meeting\n"
+"POT-Creation-Date: 2021-01-24 10:28+0200\n"
+"PO-Revision-Date: 2021-01-24 10:35+0200\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.6\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
+"X-Poedit-WPHeader: anony-zoom.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;"
+"_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"Last-Translator: \n"
+"Language: ar\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: anony-zoom.php:47
+#, php-format
+msgid ""
+"Zoom oAuth data is missing or incomplete, so please make sure all data are "
+"correct from <a href=\"%s\">Here</a>"
+msgstr ""
+"بيانات مصادقة زووم مفقودة أو غير مكتملة ، لذا يرجى التأكد من صحة جميع "
+"البيانات من <a href=\"%s\"> هنا </a>"
+
+#: functions/ajax/create-meeting.php:29
+msgid "You have already checked in"
+msgstr "لقد قمت بالدخول بالفعل"
+
+#: functions/ajax/create-meeting.php:62
+msgid "Your not allowed to do this"
+msgstr "لا يسمح لك القيام بذلك"
+
+#: functions/listings/provider.php:37
+#, php-format
+msgid "%s clinic"
+msgstr "عيادة %s"
+
+#: functions/listings/provider.php:73
+msgid "Send Meeting data"
+msgstr "إرسال بيانات الاجتماع"
+
+#: functions/listings/provider.php:88
+msgid ""
+"Sorry! No appointments available. Appointments will show when your payments "
+"are completed. If you think there is a problem, please contact us"
+msgstr ""
+"عفواً! لا توجد مواعيد متاحة. ستظهر المواعيد عند اكتمال مدفوعاتك. إذا كنت "
+"تعتقد أن هناك مشكلة ، يرجى الاتصال بنا"
+
+#: functions/scripts.php:75
+msgid "Are you sure you want to check in?"
+msgstr "هل انت متأكد من أنك تريد أن تدخل ؟"
+
+#: functions/scripts.php:76
+msgid "Are you sure you want to check out?"
+msgstr "هل انت متأكد من أنك تريد أن تخرج ؟"
+
+#: functions/scripts.php:77
+msgid "Choose speciality"
+msgstr "حدد العيادة"
+
+#: functions/woocommerce/admin.php:35 zoom-link.php:184
+msgid "Check-in"
+msgstr "دخول"
+
+#: functions/woocommerce/endpint.php:47
+msgid "You didn't set the profile ID for clinic's director"
+msgstr "لم تقم بتعيين معرف الملف الشخصي لمدير العيادة"
+
+#: functions/woocommerce/endpint.php:49
+msgid "Sorry! but this user has more than one profile. Should be one"
+msgstr ""
+"عفواً! لكن هذا المستخدم لديه أكثر من ملف تعريف واحد. يجب أن يكون ملف واحد"
+
+#: meetings/create-meeting.php:29 meetings/create-meeting.php:95
+msgid "Join Now"
+msgstr "إنضم الآن"
+
+#: meetings/create-meeting.php:30 meetings/create-meeting.php:96
+#, php-format
+msgid "Meeting password: %s"
+msgstr "كلمة المرور للإجتماع: %s"
+
+#: meetings/create-meeting.php:51
+#, php-format
+msgid "Sorry but this appointment payment is %s"
+msgstr "عفواً! ولاكن هذا الموعد %s"
+
+#: meetings/create-meeting.php:58
+msgid "You have no permission to access here"
+msgstr "ليس لديك صلاحية الوصول إلى هذه الصفحة"
+
+#: meetings/create-meeting.php:109
+msgid "You have an appointment"
+msgstr "ليس لديك مواعيد"
+
+#: zoom-link.php:192
+msgid "Doctor out"
+msgstr "الطبيب خارج الإجتماع"
+
+#: zoom-link.php:195
+msgid "You will be able to start consulting, once your doctor checks in"
+msgstr "ستكون قادرًا على بدء الاستشارة بمجرد أن يقوم طبيبك بالدخول للإجتماع"
+
+#: zoom-link.php:211
+msgid "Check out"
+msgstr "خروج"
+
+#: zoom-link.php:219
+msgid "Start meeting"
+msgstr "بدء الإجتماع"
+
+#. Plugin Name of the plugin/theme
+msgid "AnonyEngine Zoom meeting"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+#. Author URI of the plugin/theme
+msgid "https://makiomar.com"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "Connect with users with zoom, even per single service provider"
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Mohammad Omar"
+msgstr ""
