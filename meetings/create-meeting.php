@@ -2,13 +2,6 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly.
 
-function anony_get_meeting_crids($doctors_id, $order_id, $customer_id){
-    $zoom_token = new ANONY_Zoom_Token(intval($doctors_id), intval($order_id), $customer_id);
-        
-        extract($zoom_token->getTokenData());
-        
-        return ['join_url' => $join_url, 'join_pass' => $join_pass];
-}
 
 function anony_create_meeting($doctors_id, $order_id, $customer_id){
     $html = '';
