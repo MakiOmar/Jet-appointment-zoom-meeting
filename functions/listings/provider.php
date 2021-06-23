@@ -17,22 +17,11 @@ function anony_provider_appointments($provider_id, $query_by = 'provider'){
 				
 				$order = wc_get_order( intval($order_id) );
 				
-				$meeting_crids = anony_get_meeting_crids($provider, $order_id, $user_id);
 				
-				extract($meeting_crids);
 				
 				if(!$order) continue;
 				
 				$order_status  = $order->get_status();
-				
-				if($order_status !== 'completed') continue;
-				 		
-				ob_start();
-				
-					anony_checkin_markup($order);
-				
-				$checkin_link = ob_get_clean();
-				
 				
 				$service  = sprintf(esc_html__('%s clinic', ANOZOM_TEXTDOM), esc_html( get_the_title(intval($service)) ));
 				$provider = esc_html( get_the_title(intval($provider)) );
@@ -42,7 +31,35 @@ function anony_provider_appointments($provider_id, $query_by = 'provider'){
 				$date = date_i18n('F j, Y', $date);
 				$time = date_i18n('g:i a', $slot);
 				
+				if($order_status !== 'completed') {
+					echo '<div class="appointment-item-wrapper">';
+					printf(esc_html__('Your %1s appointment booked at %2s %3s   will appear once your payments are completed. If you think there is a problem, please contact us', ANOZOM_TEXTDOM), $service, $date, $time );
+					echo '</div>';
+					continue;
+				}
+				
+				$checkedin = get_post_meta(intval($order_id), 'appointment-checkin', true);
+				
+				$join_url = '';
+				
+				$join_pass = '';
+				
+				if ($checkedin == 'yes') {
+					$meeting_crids = anony_get_meeting_crids($provider, $order_id, $user_id);
+				
+					extract($meeting_crids);
+				}
+				
+				
+				 		
+				ob_start();
+				
+					anony_checkin_markup($order);
+				
+				$checkin_link = ob_get_clean();
+				
 				$user = wp_get_current_user();
+				
 				$legible_roles = array_intersect(['anony_doctor', 'administrator'], (array) $user->roles);
 				
 				$appointment_json = json_encode([
@@ -85,7 +102,7 @@ function anony_provider_appointments($provider_id, $query_by = 'provider'){
 				
 			<?php }
 		}else{
-		    esc_html_e('Sorry! No appointments available. Appointments will show when your payments are completed. If you think there is a problem, please contact us', ANOZOM_TEXTDOM);
+		    esc_html_e('Sorry! No appointments available. Appointments will appear once your payments are completed. If you think there is a problem, please contact us', ANOZOM_TEXTDOM);
     	    return;
 		}
 	    
