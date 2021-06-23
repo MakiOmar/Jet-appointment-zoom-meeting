@@ -11,15 +11,16 @@
     border-radius: 15px;
     display: inline-block;
     box-sizing: border-box;
-    min-width: 33.333%;
+    max-width: 33.333%;
     margin:10px;
+    vertical-align: top;
 }
 ul.appointment-item{
     list-style-type: none;
     padding: 0;
 }
 .check-state.start-consulting{
-    background-color:#fff;
+    background-color:#147b1a;
     border: 1px solid #d9d7d7;
     border-radius: 50%;
     height:40px;
@@ -42,6 +43,9 @@ ul.appointment-item{
     margin: 2px;
     position:relative;
     
+}
+.check-state:hover{
+    color: #fff
 }
 .zoom-loading-bg {
 	position: absolute;
@@ -141,3 +145,52 @@ ul.appointment-item li i{
     color: #BC0126;
 }
 
+/**-------Woocommerce---------*/
+
+.woocommerce-page .woocommerce-MyAccount-navigation{
+    color: #771d5b!important;
+}
+
+.woocommerce-page .woocommerce .woocommerce-MyAccount-navigation ul li.is-active {
+    background-color: #771d5b;
+}
+.woocommerce-page .woocommerce .woocommerce-MyAccount-navigation {
+    border: 1px solid #771d5b;
+}
+.woocommerce-page .woocommerce #respond input#submit,
+.woocommerce-page .woocommerce a.button,
+.woocommerce-page .woocommerce button.button,
+.woocommerce-page .woocommerce input.button,
+.woocommerce-page .woocommerce .jupiterx-wc-loadmore {
+
+    background-color: #771d5b;
+    border: 1px solid #771d5b;
+
+}
+
+.woocommerce-page  .woocommerce #respond input#submit.alt:hover,
+.woocommerce-page  .woocommerce #respond input#submit.alt:focus,
+.woocommerce-page  .woocommerce a.button.alt:hover,
+.woocommerce-page  .woocommerce a.button.alt:focus,
+.woocommerce-page  .woocommerce button.button.alt:hover,
+.woocommerce-page  .woocommerce button.button.alt:focus, 
+.woocommerce-page  .woocommerce input.button.alt:hover,
+.woocommerce-page  .woocommerce input.button.alt:focus {
+    background-color: #771d5b;
+}
+
+.woocommerce #respond input#submit.alt, .woocommerce #respond input#submit.alt:hover, .woocommerce #respond input#submit.alt.disabled, .woocommerce #respond input#submit.alt.disabled:hover, .woocommerce #respond input#submit.alt:disabled, .woocommerce #respond input#submit.alt:disabled:hover, .woocommerce #respond input#submit.alt:disabled[disabled], .woocommerce #respond input#submit.alt:disabled[disabled]:hover, .woocommerce a.button.alt, .woocommerce a.button.alt:hover, .woocommerce a.button.alt.disabled, .woocommerce a.button.alt.disabled:hover, .woocommerce a.button.alt:disabled, .woocommerce a.button.alt:disabled:hover, .woocommerce a.button.alt:disabled[disabled], .woocommerce a.button.alt:disabled[disabled]:hover, .woocommerce button.button.alt, .woocommerce button.button.alt:hover, .woocommerce button.button.alt.disabled, .woocommerce button.button.alt.disabled:hover, .woocommerce button.button.alt:disabled, .woocommerce button.button.alt:disabled:hover, .woocommerce button.button.alt:disabled[disabled], .woocommerce button.button.alt:disabled[disabled]:hover, .woocommerce input.button.alt, .woocommerce input.button.alt:hover, .woocommerce input.button.alt.disabled, .woocommerce input.button.alt.disabled:hover, .woocommerce input.button.alt:disabled, .woocommerce input.button.alt:disabled:hover, .woocommerce input.button.alt:disabled[disabled], .woocommerce input.button.alt:disabled[disabled]:hover {
+    background-color: #771d5b!important;
+}
+
+.woocommerce #respond input#submit:hover, .woocommerce #respond input#submit:focus, .woocommerce a.button:hover, .woocommerce a.button:focus, .woocommerce button.button:hover, .woocommerce button.button:focus, .woocommerce input.button:hover, .woocommerce input.button:focus, .woocommerce .jupiterx-wc-loadmore:hover, .woocommerce .jupiterx-wc-loadmore:focus {
+    background-color: #5e1146!important;
+    border-color: #5e1447!important;
+}
+
+@media screen and (max-width: 480px){
+    .appointment-item-wrapper{
+
+        max-width: 100%;
+    }
+}
