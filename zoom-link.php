@@ -203,7 +203,7 @@ function anony_checkin_markup($order){
         
         $token_data = anony_get_zoom_token_data($order);
         
-        
+       
  
         if(!$checked_in || $checked_in !== 'yes'){?>
         
@@ -232,7 +232,13 @@ function anony_checkin_markup($order){
        <?php }else{
        
         extract($token_data);
-       
+        
+        if(is_admin()) {
+            $start_meeting_html = esc_html__('Start meeting', ANOZOM_TEXTDOM);
+        }else{
+           $start_meeting_html = '<i class="fa fa-video-camera"></i>';
+        }
+        
        ?>
            
             <div class="checkout-container">
@@ -242,7 +248,7 @@ function anony_checkin_markup($order){
     		        
     		        <?php if(!is_admin() || (is_admin() && defined('DOING_AJAX') && DOING_AJAX) ) : ?>
     		        
-    		            <a href="<?= $join_url ?>" class="check-state start-consulting" data-id="<?= $doctors_id ?>" data-order="<?= $order->get_id() ?>"><i class="fa fa-video-camera"></i></a>
+    		            <a href="<?= $join_url ?>" class="check-state <?= (is_admin()) ? '' : 'start-consulting' ?>" data-id="<?= $doctors_id ?>" data-order="<?= $order->get_id() ?>"><?= $start_meeting_html ?></a>
     		        
     		        <?php else: ?>
     		            
@@ -250,9 +256,12 @@ function anony_checkin_markup($order){
     		            
     		        <?php endif; ?>
     		        
-    		   <?php }else{?>
+    		   <?php }else{
     		   
-    		    <a href="<?= $join_url ?>" class="check-state start-consulting" data-id="<?= $doctors_id ?>" data-order="<?= $order->get_id() ?>"><i class="fa fa-video-camera"></i></a>
+    		        
+    		   ?>
+    		   
+    		    <a href="<?= $join_url ?>" class="check-state start-consulting" data-id="<?= $doctors_id ?>" data-order="<?= $order->get_id() ?>"><?= $start_meeting_html ?></a>
     		   <?php }?>
     		</div>
 

@@ -7,7 +7,6 @@ function anony_provider_appointments($provider_id, $query_by = 'provider'){
 	    
 	    $query = $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}jet_appointments WHERE {$query_by} = %d ORDER BY ID DESC", $provider_id);
 	    $results = $wpdb->get_results($query, ARRAY_A );
-	    
 	    if(!empty($results) && !is_null($results)){
 	    	
 			foreach($results as $result){
@@ -24,7 +23,7 @@ function anony_provider_appointments($provider_id, $query_by = 'provider'){
 				$order_status  = $order->get_status();
 				
 				$service  = sprintf(esc_html__('%s clinic', ANOZOM_TEXTDOM), esc_html( get_the_title(intval($service)) ));
-				$provider = esc_html( get_the_title(intval($provider)) );
+				$provider = esc_html( get_the_title(intval($provider_id)) );
 				
 				$customer_name = esc_html( $order->get_billing_first_name() ) .' '.esc_html( $order->get_billing_last_name() );
 				
@@ -45,7 +44,19 @@ function anony_provider_appointments($provider_id, $query_by = 'provider'){
 				$join_pass = '';
 				
 				if ($checkedin == 'yes') {
-					$meeting_crids = anony_get_meeting_crids($provider, $order_id, $user_id);
+					if(!ZOOM_JWT){
+						$meeting_crids = anony_get_meeting_crids($provider_id, $order_id, $user_id);
+					}else{
+						$meta_key = 'zatoken_jwt_' . $provider_id .'_'.$order_id.'_'.$user_id ;
+						
+						$data = get_post_meta(intval($order_id), $meta_key, true);
+						$join_pass = $data['password'];
+
+						if($data && $data !== ''){
+							$meeting_crids = $data;
+						}
+						
+					}
 				
 					extract($meeting_crids);
 				}

@@ -41,7 +41,7 @@ add_action( 'woocommerce_account_appiontments_endpoint', function () {
 	
 	if( !empty($legible_roles) ){
 	    	$doctor_id = get_current_doctor_profile_id();
-	
+
     	if(!$doctor_id) {
     	    if(current_user_can('administrator')){
     	        esc_html_e('You didn\'t set the profile ID for clinic\'s director' , ANOZOM_TEXTDOM);
@@ -52,6 +52,7 @@ add_action( 'woocommerce_account_appiontments_endpoint', function () {
     	    return;
     	}
        anony_provider_appointments($doctor_id);
+       
 	}elseif(in_array( 'anony_patient', $user_roles, true )){
 	    anony_provider_appointments($user_id, 'user_id');
 	}

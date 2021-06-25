@@ -30,7 +30,7 @@
 					type : 'POST',
 					url : anozomLoca.ajaxURL, // admin-ajax.php URL
 				
-					data: 'action=anozom_create_meeting&doctors_id=' + id + '&order_id=' + order_id, // send form data + action parameter
+					data: 'action=' + $('#zoom-protocol').val() + '&doctors_id=' + id + '&order_id=' + order_id, // send form data + action parameter
 					
 					beforeSend: function(){
 					    clicked.find('.zoom-loading, .zoom-loading-bg').show();
@@ -49,13 +49,23 @@
 							}
 						},
 					success: function(response){
-					    console.log(response.msg)
-					    if( response.access === 'allow'){
-					        if(response.html !== undefined){
-					            $('#zoom-controls-' + order_id).html(response.html);
-					        }
-					        window.open(response.link, '_blank') ;
+					    if($('#zoom-protocol').val() == 'anozom_create_meeting'){
+					        
+    					    if( response.access === 'allow'){
+    					        if(response.html !== undefined){
+    					            $('#zoom-controls-' + order_id).html(response.html);
+    					        }
+    					        window.open(response.link, '_blank') ;
+    					    }
+					    }else{
+					        if( response.access === 'allow'){
+    					        if(response.html !== undefined){
+    					            $('#zoom-controls-' + order_id).html(response.html);
+    					        }
+    					        console.log(response.x)
+    					    }
 					    }
+					    
 						
 					},
 					

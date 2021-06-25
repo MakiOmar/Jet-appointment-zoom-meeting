@@ -17,6 +17,10 @@ require_once 'vendor/autoload.php';
 add_action('init', function(){
 	if(!is_user_logged_in()) return;
 });
+/**
+ * Options page name
+ */
+define('ZOOM_JWT', true);
 
 /**
  * Options page name
@@ -160,14 +164,16 @@ function get_order_data($order_id, $order, $cart_item){
 	
 }
 
-add_action('wp_footer', function(){
-	
+function zoom_protocol(){
+    	$protocol = 'anozom_create_meeting';
+    	if(ZOOM_JWT){
+    	    $protocol = 'anozom_create_meeting_jwt';
+    	} ?>
+	    <input type="hidden" id="zoom-protocol" value="<?php echo $protocol ?>"/>
+<?php }
 
-/*
-	echo '<pre>';
-	
-	echo '</pre>';*/
-});
+add_action('admin_footer', 'zoom_protocol');
+add_action('wp_footer', 'zoom_protocol');
 
 /**
  * Load plugin textdomain.

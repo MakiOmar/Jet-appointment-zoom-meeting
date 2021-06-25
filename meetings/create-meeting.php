@@ -2,7 +2,35 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly.
 
-
+function anony_meeting_notify($order_id, $doctors_id){
+    $html = '';
+    $order = wc_get_order($order_id);
+    $customer_id = $order->get_customer_id();
+    
+    $meta_key = 'zatoken_jwt_' . $doctors_id .'_'.$order_id.'_'.$customer_id ;
+    
+    $data = get_post_meta(intval($order_id), $meta_key, true);
+    
+    if($data && $data !== ''){
+        $html .= "<a href='".$data['join_url']."'>".esc_html__('Join Now', ANOZOM_TEXTDOM)."</a>";
+        $html .= "<p>".sprintf(esc_html__('Meeting password: %s', ANOZOM_TEXTDOM), $data['password'])."</p>";
+        
+        $doctor_email = get_post_meta(intval($doctors_id), 'g-mail', true);
+        $patient_email = $order->get_billing_email();
+        $protocols = array('http://', 'http://www.','https://', 'https://www.', 'www.');
+        $noreply = str_replace($protocols, '', get_bloginfo('url'));
+        
+        $headers = array(
+            'Content-Type: text/html; charset=UTF-8',
+            'From: '.get_bloginfo().' <noreplay@'.$noreply.'>',
+            'Bcc: '.$doctor_email,
+            );
+         
+        $mail = wp_mail($patient_email , esc_html__("Your appointment's remote meeting details", ANOZOM_TEXTDOM), $html, $headers );
+        
+        return $mail;
+    }
+}
 function anony_create_meeting($doctors_id, $order_id, $customer_id){
     $html = '';
 
