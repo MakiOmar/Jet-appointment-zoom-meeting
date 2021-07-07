@@ -148,3 +148,51 @@ function anony_create_meeting_jwt(){
 add_action( 'wp_ajax_anozom_create_meeting', 'anony_create_meeting_aouth' );
 add_action( 'wp_ajax_anozom_create_meeting_jwt', 'anony_create_meeting_jwt' );
 
+add_action( 'woocommerce_order_status_changed', function( $order_id, $old_status, $new_status, $order ){
+    if( $new_status == "completed" ) {
+        
+        $current_doctor_id = get_current_doctor_profile_id();
+    
+    	$order = wc_get_order($order_id);
+        
+        $doctors_id = anony_get_doctors_id($order);
+        
+    	$user_id = $order->get_customer_id();
+    	
+    	
+    	$customer_id = $user_id;
+    	
+    	$meta_key = 'zatoken_jwt_' . $doctors_id.'_'.$order_id.'_'.$customer_id ;
+    
+    	$checked_in = get_post_meta(intval($order_id), 'appointment-checkin', true);
+    	error_log($checked_in);
+    	if($checked_in && $checked_in !== ''){
+    		
+    		if($checked_in !== 'yes') update_post_meta(intval($order_id), 'appointment-checkin', 'yes');
+    		
+    		$mail = anony_meeting_notify($order_id, $doctors_id);
+    		
+    	}else{
+    		
+    		if(intval($current_doctor_id) === intval($doctors_id) || current_user_can('administrator')){
+                
+                $response = createJwtZoomMeeting([
+                    "topic" => "Doctor appointment",
+                    "type" => 2,
+                    "start_time" => anony_get_appointment_date($order),
+                    //"timezone" => wp_zoom_timezone_string,
+                    "duration" => "30", // 30 mins
+                    "password" => wp_generate_password('6', false),
+                ]);
+                
+                update_post_meta(intval($order_id), $meta_key, $response);
+                
+                update_post_meta(intval($order_id), 'appointment-checkin', 'yes');
+                
+                anony_meeting_notify($order_id, $doctors_id);
+                
+            }
+    	}
+    	
+    }
+}, 99, 4 );
