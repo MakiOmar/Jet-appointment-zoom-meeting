@@ -26,7 +26,7 @@ function anony_meeting_notify($order_id, $doctors_id){
             'Bcc: '.$doctor_email,
             );
          
-        $mail = wp_mail($patient_email , esc_html__("Your appointment's remote meeting details", ANOZOM_TEXTDOM), $html, $headers );
+        $mail = wp_mail($patient_email , esc_html__("Your appointment remote meeting details", ANOZOM_TEXTDOM), $html, $headers );
         
         return $mail;
     }
