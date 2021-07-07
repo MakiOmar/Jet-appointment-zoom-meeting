@@ -113,7 +113,7 @@ function anony_provider_appointments($provider_id, $query_by = 'provider'){
 				
 			<?php }
 		}else{
-		    esc_html_e('Sorry! No appointments available. Appointments will appear once your payments are completed. If you think there is a problem, please contact us', ANOZOM_TEXTDOM);
+		    esc_html_e('<p class="no-appointment">Sorry! No appointments available. Appointments will appear once your payments are completed. If you think there is a problem, please contact us</p>', ANOZOM_TEXTDOM);
     	    return;
 		}
 	    
